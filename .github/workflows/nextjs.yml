@@ -40,10 +40,10 @@ jobs:
             <meta charset="utf-8">
             <title>Redirecting...</title>
             <!-- Change the URL below to your actual Vercel URL once deployed -->
-            <link rel="canonical" href="https://resume-forge-six.vercel.app">
-            <meta http-equiv="refresh" content="0; url=https://resume-forge-six.vercel.app">
+            <link rel="canonical" href="https://resume-forge-nk.vercel.app">
+            <meta http-equiv="refresh" content="0; url=https://resume-forge-nk.vercel.app">
             <script type="text/javascript">
-              window.location.href = "https://resume-forge-six.vercel.app";
+              window.location.href = "https://resume-forge-nk.vercel.app";
             </script>
             <style>
               body {
@@ -89,7 +89,7 @@ jobs:
             <div class="container">
               <h1>Redirecting to ResumeForge</h1>
               <p>Please wait while we redirect you to the application.</p>
-              <p>If you are not redirected automatically, <a href="https://resume-forge-six.vercel.app">click here to proceed</a>.</p>
+              <p>If you are not redirected automatically, <a href="https://resume-forge-nk.vercel.app">click here to proceed</a>.</p>
             </div>
           </body>
           </html>
