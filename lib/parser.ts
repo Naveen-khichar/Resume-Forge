@@ -1,14 +1,12 @@
-import { PDFParse } from "pdf-parse";
+import { getDocumentProxy, extractText } from "unpdf";
 import mammoth from "mammoth";
 
 
 export async function parsePdf(buffer: Buffer): Promise<string> {
   try {
-    // Instantiate the PDFParse class using the Uint8Array buffer data
-    const parser = new PDFParse({ data: new Uint8Array(buffer) });
-    const textResult = await parser.getText();
-    await parser.destroy(); // Clean up parser resources
-    return textResult.text || "";
+    const pdf = await getDocumentProxy(new Uint8Array(buffer));
+    const { text } = await extractText(pdf, { mergePages: true });
+    return text || "";
   } catch (error) {
     console.error("Error parsing PDF:", error);
     throw new Error("Failed to extract text from PDF resume.");
