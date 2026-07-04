@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     const mimeType = file.type;
 
     // 2. Extract raw text from the PDF/DOCX resume
-    const parsedText = await parseResume(buffer, mimeType);
+    const parsedText = await parseResume(buffer, mimeType, file.name);
 
     if (!parsedText || parsedText.trim().length === 0) {
       return NextResponse.json(

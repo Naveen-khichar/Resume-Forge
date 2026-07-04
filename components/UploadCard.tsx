@@ -102,6 +102,27 @@ export default function UploadCard({
         body: formData, // Fetch automatically handles Content-Type boundaries for FormData
       });
 
+      if (!response.ok) {
+        let errorMessage = "Failed to analyze resume.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (_) {
+          try {
+            const errorText = await response.text();
+            if (errorText.includes("<html") || errorText.includes("<!DOCTYPE")) {
+              errorMessage = `Server error (${response.status}): The request timed out or the server failed to respond. Please check your database connection or try again.`;
+            } else {
+              errorMessage = errorText || errorMessage;
+            }
+          } catch (textErr) {
+            errorMessage = `HTTP error ${response.status}`;
+          }
+        }
+        alert(errorMessage);
+        return;
+      }
+
       const data = await response.json();
       console.log("Response from server:", data);
       

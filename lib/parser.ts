@@ -1,25 +1,6 @@
 import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
-import path from "path";
-import { pathToFileURL } from "url";
 
-// Explicitly set the pdf.worker.mjs location for Next.js server runtime
-try {
-  const workerPath = path.join(
-    process.cwd(),
-    "node_modules",
-    "pdfjs-dist",
-    "legacy",
-    "build",
-    "pdf.worker.mjs"
-  );
-  // Convert standard file path to a valid file:// URL for ESM loader support on Windows
-  const workerUrl = pathToFileURL(workerPath).toString();
-  PDFParse.setWorker(workerUrl);
-  console.log("PDF worker URL configured successfully:", workerUrl);
-} catch (err) {
-  console.error("Failed to set PDF worker path:", err);
-}
 
 export async function parsePdf(buffer: Buffer): Promise<string> {
   try {
@@ -45,15 +26,21 @@ export async function parseDocx(buffer: Buffer): Promise<string> {
 }
 
 /**
- * Main parser coordinator that routes parsing tasks based on MIME type.
+ * Main parser coordinator that routes parsing tasks based on MIME type or file extension.
  */
-export async function parseResume(buffer: Buffer, mimeType: string): Promise<string> {
-  if (mimeType === "application/pdf") {
-    return await parsePdf(buffer);
-  } else if (
+export async function parseResume(buffer: Buffer, mimeType: string, fileName?: string): Promise<string> {
+  const isPdf = 
+    mimeType === "application/pdf" || 
+    (fileName && fileName.toLowerCase().endsWith(".pdf"));
+
+  const isDocx = 
     mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-    mimeType === "application/msword"
-  ) {
+    mimeType === "application/msword" ||
+    (fileName && (fileName.toLowerCase().endsWith(".docx") || fileName.toLowerCase().endsWith(".doc")));
+
+  if (isPdf) {
+    return await parsePdf(buffer);
+  } else if (isDocx) {
     return await parseDocx(buffer);
   } else {
     throw new Error("Unsupported file type. Only PDF and DOCX formats are supported.");
